@@ -51,52 +51,49 @@ class BinarySearchTree {
   remove(value) {
     const removeNode = (node, value) => {
       if (!node) return null
-      if (node.data > value) {
-        node.left = removeNode(node, value)
-        return node
-      } else if (node.data < value) {
-        node.right = removeNode(node, value)
-        return node
-      } else {
-        if (!node.left && !node.right) return null
 
-        if (!node.left) {
+      if (!node.left && !node.right) return null
+
+      if (node.data > value ) {
+        node.left = removeNode(node.left, value)
+        return node
+      }
+
+      if (node.data < value) {
+        node.right = removeNode(node.right, value)
+        return node
+      }
+
+      if (!node.left) {
           node = node.right
           return node
-        }
+      }
 
-        if (!node.right) {
+      if (!node.right) {
           node = node.left
           return node
-        }
-
-        let minright = node.right
-        while (minright.left) {
-          minright = minright.left
-        }
-
-        node.value = minright.data
-        node.right = removeNode(node.right, minright.value)
-        return node;
       }
+
+      let maxLeft = node.left;
+      while (maxLeft.right) maxLeft = maxLeft.right;
+      node.data = maxLeft.data;
+      node.left = removeNode(node.left, maxLeft.data);
+      return node;
     }
+    this.Root = removeNode(this.root(), value)
   }
 
   min() {
     if (!this.root()) return;
     let node = this.root()
-    while (node.left) {
-      node = node.left
-    }
+    while (node.left) node = node.left
     return node.data
   }
 
   max() {
     if (!this.root()) return;
     let node = this.root()
-    while (node.right) {
-      node = node.right
-    }
+    while (node.right) node = node.right
     return node.data
   }
 }
